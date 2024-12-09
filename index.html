@@ -1,170 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>AI Search Box with Map</title>
-  <!-- Inline CSS -->
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+    <!-- Meta Tags for Character Set and Viewport Settings -->
+    <meta charset="UTF-8"> 
+    <!-- Ensures proper character encoding for international characters -->
     
-    body {
-      font-family: 'Roboto', sans-serif;
-      background-color: #f7fafc;
-    }
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <!-- Ensures the app is responsive and looks good on mobile devices -->
+    
+    <title>AI Search with Map</title> <!-- Title of your webpage (will appear in browser tab) -->
 
-    .container {
-      max-width: 800px;
-      margin: auto;
-      padding: 1rem;
-    }
+    <!-- External Resources for Styling and Icons -->
 
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 0;
-    }
+    <!-- Tailwind CSS for Styling (Using CDN for simplicity) -->
+    <!-- Tailwind CSS makes it easy to create responsive and styled components -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
-    header h1 {
-      font-size: 2rem;
-      font-weight: bold;
-      color: #2d3748;
-    }
+    <!-- Font Awesome for Icons (for using icons like search) -->
+    <!-- This allows you to use the search icon later in the search button -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
 
-    nav ul {
-      display: flex;
-      list-style: none;
-      gap: 1rem;
-    }
+    <!-- Google Font: Roboto (Ensures consistent and modern font across devices) -->
+    <!-- This is a popular, easy-to-read font -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
-    nav a {
-      color: #4a5568;
-      text-decoration: none;
-      transition: color 0.3s;
-    }
+    <!-- Leaflet CSS (For the map functionality) -->
+    <!-- Leaflet is used to display maps on your website -->
+    <link href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" rel="stylesheet">
 
-    nav a:hover {
-      color: #2d3748;
-    }
-
-    .main-content {
-      margin-top: 2rem;
-    }
-
-    .search-box {
-      background-color: #fff;
-      padding: 1.5rem;
-      border-radius: 0.5rem;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      display: flex;
-      gap: 1rem;
-    }
-
-    .search-box input {
-      flex: 1;
-      padding: 1rem;
-      border: 1px solid #cbd5e0;
-      border-radius: 0.5rem;
-      outline: none;
-    }
-
-    .search-box input:focus {
-      border-color: #4299e1;
-      box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.5);
-    }
-
-    .search-box button {
-      background-color: #4299e1;
-      color: white;
-      padding: 1rem;
-      border: none;
-      border-radius: 0.5rem;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    .search-box button:hover {
-      background-color: #2b6cb0;
-    }
-
-    .map-container {
-      margin-top: 2rem;
-      background-color: #fff;
-      padding: 1.5rem;
-      border-radius: 0.5rem;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    #map {
-      height: 400px;
-      width: 100%;
-      border-radius: 0.5rem;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <header>
-      <h1>AI Search</h1>
-      <nav>
-        <ul>
-          <li><a href="#">Home</a></li>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Contact</a></li>
-        </ul>
-      </nav>
-    </header>
-    <main class="main-content">
-      <div class="search-box">
-        <input id="searchInput" type="text" placeholder="Search for a location..."/>
-        <button id="searchButton">Search</button>
-      </div>
-      <div class="map-container">
-        <h2>Map</h2>
-        <div id="map"></div>
-      </div>
-    </main>
-  </div>
-
-  <!-- Inline JS -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      var map = L.map('map').setView([51.505, -0.09], 13);
-
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      }).addTo(map);
-
-      L.marker([51.505, -0.09]).addTo(map)
-        .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
-        .openPopup();
-
-      document.getElementById('searchButton').addEventListener('click', function () {
-        var searchValue = document.getElementById('searchInput').value;
-
-        if (searchValue) {
-          alert("Search is not yet implemented for '" + searchValue + "'.");
-        } else {
-          alert("Please enter a search term.");
+    <style>
+        /* Styling for the map to ensure it takes up full space in the container */
+        #map {
+            height: 100%; /* Ensures that the map covers the entire container */
         }
-      });
-    });
+    </style>
+</head>
+<body class="font-roboto bg-gray-100">
+    <!-- Main Container for the app -->
+    <div class="container mx-auto p-4">
+        <!-- Header Section with App Title and Navigation Links -->
+        <header class="flex justify-between items-center py-4">
+            <h1 class="text-3xl font-bold text-gray-800">AI Search</h1> <!-- App Title -->
+            <nav>
+                <ul class="flex space-x-4">
+                    <!-- Navigation Links: Replace the # with the actual URL or path when you have actual pages -->
+                    <li><a href="#" class="text-gray-600 hover:text-gray-800">Home</a></li> <!-- Home Link -->
+                    <li><a href="#" class="text-gray-600 hover:text-gray-800">About</a></li> <!-- About Link -->
+                    <li><a href="#" class="text-gray-600 hover:text-gray-800">Contact</a></li> <!-- Contact Link -->
+                </ul>
+            </nav>
+        </header>
 
-    // Leaflet JS Integration
-    (function loadLeafletCSS() {
-      var leafletCSS = document.createElement('link');
-      leafletCSS.rel = 'stylesheet';
-      leafletCSS.href = 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css';
-      document.head.appendChild(leafletCSS);
+        <!-- Main Content Section -->
+        <main class="mt-8">
+            <!-- Search Section -->
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <div class="flex items-center space-x-4">
+                    <!-- Search Input Box for Users to Enter a Location -->
+                    <!-- The id="searchBox" is used to get the value entered by the user in JavaScript -->
+                    <input type="text" class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Search for a location..." id="searchBox" />
+                    <!-- Search Button to Trigger Search Function -->
+                    <button class="p-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500" onclick="searchLocation()">
+                        <!-- Font Awesome Search Icon -->
+                        <i class="fas fa-search"></i> <!-- This adds a search icon to the button -->
+                    </button>
+                </div>
+            </div>
 
-      var leafletJS = document.createElement('script');
-      leafletJS.src = 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.js';
-      leafletJS.onload = function () {
-        console.log('Leaflet loaded');
-      };
-      document.body.appendChild(leafletJS);
-    })();
-  </script>
+            <!-- Map Section -->
+            <div class="mt-8">
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Map</h2> <!-- Map Title -->
+                    <div class="relative h-96">
+                        <!-- The Map will be inserted here. The ID 'map' is used in JavaScript to interact with the map. -->
+                        <div class="absolute inset-0 w-full h-full rounded-lg" id="map"></div> <!-- Map Container -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- JavaScript Section -->
+    <script>
+        // This script runs after the page loads. It handles the map initialization and search functionality.
+
+        // Initialize the Map (Leaflet Map)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Map object initialized with a default location (latitude and longitude of a default place).
+            // You will change the default coordinates later based on the user search or dynamic data.
+            var map = L.map('map').setView([51.505, -0.09], 13);  // Default Location (change if needed)
+            // The map is centered on London coordinates, but these coordinates will be updated after search
+
+            // Leaflet Tile Layer for OpenStreetMap (background tiles of the map)
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map); // Add OpenStreetMap as the map's background tiles
+
+            // Add a marker at the default coordinates (change it dynamically later)
+            L.marker([51.505, -0.09]).addTo(map)  // Coordinates can change based on search
+                .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
+                .openPopup(); // Adding a marker to the map at the initial coordinates
+        });
+
+        // Function to Handle the Search (Placeholder for integrating with your backend API)
+        function searchLocation() {
+            // Grab the value entered by the user in the search input box
+            const searchTerm = document.getElementById('searchBox').value;  // Get the value from the searchBox input field
+            console.log("Searching for:", searchTerm);  // This logs the search term to the console for debugging
+
+            // Placeholder for future integration with your backend (Cloudflare Workers, Supabase, etc.)
+            // Example of how you would fetch data from an API to use the search term:
+            // fetch(`YOUR_BACKEND_API_URL/search?query=${searchTerm}`)
+            //     .then(response => response.json())
+            //     .then(data => {
+            //         // Use the returned data to adjust the map view or show results
+            //         // Example: map.setView([data.lat, data.lng], 13);
+            //     })
+            //     .catch(error => console.error('Error fetching search results:', error));
+
+            // This is where you can later modify the map's location based on search results:
+            // map.setView([newLat, newLng], 13); // Update the map view based on the search results
+        }
+    </script>
 </body>
 </html>
