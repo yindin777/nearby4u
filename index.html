@@ -9,7 +9,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <!-- Makes the page responsive on different devices. The viewport is set to the device's width, and the initial zoom level is 1.0 -->
 
-    <title>Nearest</title>
+    <title>Nearest AI Search Box with Map</title>
     <!-- Sets the title of the webpage, which is displayed in the browser tab -->
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -48,7 +48,7 @@
         <!-- Starts a header section with the following TailwindCSS classes: flex: Applies Flexbox layout. justify-between: Distributes space between the items, placing them at opposite ends. items-center: Vertically centers the items. py-4: Adds padding to the top and bottom -->
 
             <h1 class="text-3xl font-bold text-gray-800">
-                Nearest
+                Nearest AI Search
             </h1>
             <!-- Displays the page title "AI Search" inside an <h1> tag. text-3xl: Sets the text size to extra large. font-bold: Makes the text bold. text-gray-800: Sets the text color to a dark gray -->
 
@@ -109,6 +109,14 @@
 
                 <div class="bg-white p-6 rounded-lg shadow-lg">
                 <!-- Creates another white background section with padding (p-6), rounded corners (rounded-lg), and a shadow effect (shadow-lg) -->
+
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">
+                        Map
+                    </h2>
+                    <!-- Defines a subtitle "Map" with a text size of 2xl (text-2xl), bold font (font-bold), and dark gray text color (text-gray-800) -->
+
+                    <div class="relative h-96">
+                    <!-- Creates a container with a relative position and a height of 24rem (h-96), which will hold the map -->
 
                         <div class="absolute inset-0 w-full h-full rounded-lg" id="map">
                         <!-- Defines a div with absolute positioning (absolute), taking up the full width and height of its parent (w-full h-full), and rounded corners (rounded-lg). This div will hold the map, with the ID "map." -->
