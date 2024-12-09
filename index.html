@@ -1,74 +1,84 @@
-```html
-<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Search Box with Map</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   AI Search Box with Map
+  </title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+  <link href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" rel="stylesheet"/>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js">
+  </script>
   <style>
-    #map { height: 100%; }
+   #map {
+    height: 100%;
+   }
   </style>
-</head>
-<body class="font-roboto bg-gray-100">
+ </head>
+ <body class="font-roboto bg-gray-100">
   <div class="container mx-auto p-4">
+   <header class="flex justify-between items-center py-4">
+    <h1 class="text-3xl font-bold text-gray-800">
+     AI Search
+    </h1>
+    <nav>
+     <ul class="flex space-x-4">
+      <li>
+       <a class="text-gray-600 hover:text-gray-800" href="#">
+        Home
+       </a>
+      </li>
+      <li>
+       <a class="text-gray-600 hover:text-gray-800" href="#">
+        About
+       </a>
+      </li>
+      <li>
+       <a class="text-gray-600 hover:text-gray-800" href="#">
+        Contact
+       </a>
+      </li>
+     </ul>
+    </nav>
+   </header>
+   <main class="mt-8">
+    <div class="bg-white p-6 rounded-lg shadow-lg">
+     <div class="flex items-center space-x-4">
+      <input class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Search for a location..." type="text"/>
+      <button class="p-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+       <i class="fas fa-search">
+       </i>
+      </button>
+     </div>
     </div>
-    <main class="mt-8">
-      <div class="bg-white p-6 rounded-lg shadow-lg">
-        <div class="flex items-center space-x-4">
-          <input type="text" id="search-input" placeholder="Search for a location..." class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-          <button id="search-button" class="p-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"><i class="fas fa-search"></i></button>
-        </div>
+    <div class="mt-8">
+     <div class="bg-white p-6 rounded-lg shadow-lg">
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">
+       Map
+      </h2>
+      <div class="relative h-96">
+       <div class="absolute inset-0 w-full h-full rounded-lg" id="map">
+       </div>
       </div>
-      <div class="mt-8">
-        <div class="bg-white p-6 rounded-lg shadow-lg">
-          <div class="relative h-96">
-            <div id="map" class="absolute inset-0 w-full h-full"></div>
-          </div>
-        </div>
-      </div>
-    </main>
+     </div>
+    </div>
+   </main>
   </div>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const map = L.map('map').setView([0, 0], 2); // Initial view
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
+  <script>
+   document.addEventListener('DOMContentLoaded', function () {
+       var map = L.map('map').setView([51.505, -0.09], 13);
 
-    let marker; // Define marker outside to update later
+       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+       }).addTo(map);
 
-    document.getElementById('search-button').addEventListener('click', function() {
-        const query = document.getElementById('search-input').value;
-        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.length > 0) {
-                    const lat = parseFloat(data[0].lat); // Parse to float
-                    const lon = parseFloat(data[0].lon); // Parse to float
-                    if (marker) {
-                        marker.setLatLng([lat, lon]); // Update existing marker
-                    } else {
-                        marker = L.marker([lat, lon]).addTo(map); // Create marker if it doesn't exist
-                    }
-                    map.setView([lat, lon], 13);
-                    marker.bindPopup(data[0].display_name).openPopup();
-                } else {
-                    alert('Location not found');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred during the search.');
-            });
-    });
-});
-
-</script>
-</body>
+       L.marker([51.505, -0.09]).addTo(map)
+           .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
+           .openPopup();
+   });
+  </script>
+ </body>
 </html>
-```
