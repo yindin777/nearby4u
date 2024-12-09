@@ -1,1 +1,95 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>AI Search Box with Map</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" rel="stylesheet"/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <style>
+      #map {
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body class="font-roboto bg-gray-100">
+    <div class="container mx-auto p-4">
+      <header class="flex justify-between items-center py-4">
+        <h1 class="text-3xl font-bold text-gray-800">AI Search</h1>
+        <nav>
+          <ul class="flex space-x-4">
+            <li><a class="text-gray-600 hover:text-gray-800" href="#">Home</a></li>
+            <li><a class="text-gray-600 hover:text-gray-800" href="#">About</a></li>
+            <li><a class="text-gray-600 hover:text-gray-800" href="#">Contact</a></li>
+          </ul>
+        </nav>
+      </header>
 
+      <main class="mt-8">
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+          <div class="flex items-center space-x-4">
+            <input id="searchBox" class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Search for a location..." type="text"/>
+            <button id="searchButton" class="p-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="mt-8">
+          <div class="bg-white p-6 rounded-lg shadow-lg">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Map</h2>
+            <div class="relative h-96">
+              <div class="absolute inset-0 w-full h-full rounded-lg" id="map"></div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      // Initialize the map
+      var map = L.map('map').setView([51.505, -0.09], 13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+
+      var marker = L.marker([51.505, -0.09]).addTo(map);
+
+      // Function to handle search
+      function searchLocation() {
+        var query = document.getElementById('searchBox').value;
+        
+        if (!query) {
+          alert("Please enter a location.");
+          return;
+        }
+
+        // Call to OpenCage API for geocoding (replace 'YOUR_API_KEY' with your actual API key)
+        var apiKey = 'YOUR_API_KEY'; // Obtain a free API key from OpenCage
+        var url = `https://api.opencagedata.com/geocode/v1/json?q=${query}&key=${apiKey}`;
+
+        fetch(url)
+          .then(response => response.json())
+          .then(data => {
+            if (data.results && data.results.length > 0) {
+              var result = data.results[0];
+              var lat = result.geometry.lat;
+              var lng = result.geometry.lng;
+              
+              // Update the map's view and marker position
+              map.setView([lat, lng], 13);
+              marker.setLatLng([lat, lng]).bindPopup(result.formatted).openPopup();
+            } else {
+              alert("Location not found.");
+            }
+          })
+          .catch(error => alert("Error fetching location data."));
+      }
+
+      // Event listener for the search button
+      document.getElementById('searchButton').addEventListener('click', searchLocation);
+    </script>
+  </body>
+</html>
