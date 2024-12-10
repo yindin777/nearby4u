@@ -1,100 +1,87 @@
+<!DOCTYPE html>
 <html lang="en">
-<!-- Defines the language of the document as English (lang="en") -->
-
 <head>
-    <!-- Starts the <head> section, which contains metadata and resources for the page -->
-    <meta charset="utf-8"/>
-    <!-- Defines the character encoding for the document as UTF-8, ensuring support for special characters -->
-
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <!-- Makes the page responsive on different devices. The viewport is set to the device's width, and the initial zoom level is 1.0 -->
-
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Nearest AI Search</title>
-    <!-- Sets the title of the webpage, which is displayed in the browser tab -->
-
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Links to the TailwindCSS framework via a CDN, which provides utility-first CSS classes for styling -->
-
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-    <!-- Links to Font Awesome, a library providing a set of icons to use in your webpage -->
-
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
-    <!-- Links to Google Fonts to use the "Roboto" font in various weights (400, 500, 700) -->
-
-    <link href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" rel="stylesheet"/>
-    <!-- Links to Leaflet's CSS file, which is a library for interactive maps -->
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet" />
+    <link href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" rel="stylesheet" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <!-- Links to Leaflet's JavaScript library, used to create and interact with maps -->
 </head>
 
 <body class="font-roboto bg-gray-100">
-<!-- Starts the <body> section, which holds the visible content of the webpage -->
-
 <header class="flex justify-center items-center py-4">
-    <!-- The header is now centered using flex and justify-center classes -->
-    <h1 class="text-4xl font-bold text-green-800">
-        NearBy
-    </h1>
+    <h1 class="text-4xl font-bold text-green-800">NearBy</h1>
 </header>
-        <main class="mt-8">
-        <!-- Starts the main content section with a top margin of 2rem (mt-8) -->
-
-            <div class="bg-white p-6 rounded-lg shadow-lg">
-            <!-- Creates a white background section with padding (p-6), rounded corners (rounded-lg), and a shadow effect (shadow-lg) -->
-
-                <div class="flex items-center space-x-4">
-                <!-- Defines a Flexbox container for arranging items (an input and a button) horizontally with space between them (space-x-4) -->
-
-                    <input class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Search for a location..." type="text"/>
-                    <!-- Defines an input field with various styles: w-full: Makes the input take the full available width. p-4: Adds padding. border border-gray-300: Adds a light gray border around the input. rounded-lg: Rounds the corners of the input. focus:outline-none focus:ring-2 focus:ring-blue-500: Removes the default outline and adds a blue ring when the input is focused -->
-
-                    <button class="p-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <i class="fas fa-search">
-                        </i>
-                    </button>
-                    <!-- Defines a button with these styles: p-4: Adds padding. bg-blue-500: Sets the background color to blue. text-white: Sets the text color to white. rounded-lg: Rounds the corners of the button. hover:bg-blue-600: Changes the background color to a darker blue when hovered. focus:outline-none focus:ring-2 focus:ring-blue-500: Removes the outline and adds a blue focus ring when the button is focused. Inside the button, an icon (<i>) from Font Awesome is used for the search icon (fa-search) -->
-
-                </div>
-            </div>
-
-            <div class="mt-8">
-            <!-- Adds a margin top (mt-8) before the next section -->
-
-                    <div class="relative h-96">
-                    <!-- Creates a container with a relative position and a height of 24rem (h-96), which will hold the map -->
-
-                        <div class="absolute inset-0 w-full h-full rounded-lg" id="map">
-                        <!-- Defines a div with absolute positioning (absolute), taking up the full width and height of its parent (w-full h-full), and rounded corners (rounded-lg). This div will hold the map, with the ID "map." -->
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </main>
-
+<main class="mt-8">
+    <div class="bg-white p-6 rounded-lg shadow-lg">
+        <div class="flex items-center space-x-4">
+            <input id="search-input" 
+                   class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                   placeholder="Search for a location..." 
+                   type="text" />
+            <button id="search-button" 
+                    class="p-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var map = L.map('map').setView([51.505, -0.09], 13);
-            <!-- The script tag starts here. When the DOM content is loaded, it initializes a Leaflet map centered at the coordinates [51.505, -0.09] with a zoom level of 13 -->
+    <div id="result-container" class="mt-4 text-center text-gray-700"></div>
 
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
-            <!-- Adds a tile layer (map images) from OpenStreetMap to the map -->
+    <div class="mt-8">
+        <div class="relative h-96">
+            <div class="absolute inset-0 w-full h-full rounded-lg" id="map"></div>
+        </div>
+    </div>
+</main>
 
-            L.marker([51.505, -0.09]).addTo(map)
-                .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
-                .openPopup();
-            <!-- Adds a marker at the map's center and binds a popup to the marker, which opens automatically when the map loads -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Initialize the map
+        var map = L.map("map").setView([51.505, -0.09], 13);
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        }).addTo(map);
+        L.marker([51.505, -0.09]).addTo(map)
+            .bindPopup("A pretty CSS3 popup.<br> Easily customizable.")
+            .openPopup();
 
+        // Search logic
+        const searchInput = document.getElementById("search-input");
+        const searchButton = document.getElementById("search-button");
+        const resultContainer = document.getElementById("result-container");
+
+        searchButton.addEventListener("click", async () => {
+            const query = searchInput.value.trim();
+            if (!query) {
+                resultContainer.textContent = "Please enter a search query.";
+                return;
+            }
+
+            resultContainer.textContent = "Searching...";
+
+            try {
+                // Send query to Cloudflare Worker
+                const response = await fetch("/search", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ query }),
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    resultContainer.textContent = data.result || "No results found.";
+                } else {
+                    resultContainer.textContent = `Error: ${response.statusText}`;
+                }
+            } catch (error) {
+                resultContainer.textContent = `Error: ${error.message}`;
+            }
         });
-    </script>
-
+    });
+</script>
 </body>
-
 </html>
-<!-- Closes the <html> tag, ending the HTML document →
