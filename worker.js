@@ -1,27 +1,38 @@
-import { getAi, getAiCatalog } from 'https://cloudflare.com/kv/public/cloudflare-workers-for-github/cloudflare-workers-for-github/raw/main/cloudflare-workers-for-github/dist/index.js';
+addEventListener('fetch', event => {
+    return event.request.method === 'POST'
+        ? handlePostRequest(event)
+        : new Response('Method Not Allowed', { status: 405 });
+});
 
-export default {
-  async fetch(request) {
-    const { pathname } = new URL(request.url);
+async function handlePostRequest(event) {
+    const request = event.request;
+    const { query, latitude, longitude } = await request.json();
 
-    if (pathname === '/ai-search') {
-      const { query, latitude, longitude } = await request.json();
+    try {
+        // Retrieve the AI model from the Workers AI Catalog
+        const ai = await event.waitUntil(AI.getInstance({
+            name: "nearby4u", // Replace with the actual name of your AI model
+            binding: "nearby4u" 
+        }));
 
-      // Get the AI model from the Workers AI Catalog
-      const ai = await getAi(getAiCatalog(), 'nearby4u'); 
+        // Generate AI response
+        const response = await ai.generate({ 
+            prompt: `Find interesting places and recommendations near ${latitude},${longitude}. 
+                    Consider user interests (if available). 
+                    Provide results in a concise and human-readable format.`,
+            input: query
+        });
 
-      // Use the AI model to generate a response
-      const response = await ai.generate({ 
-        prompt: `Find interesting places and recommendations near ${latitude},${longitude}.`, 
-        // Add more context or instructions to the prompt as needed
-      });
+        // Return the AI response as JSON
+        return new Response(JSON.stringify({ result: response.text }), {
+            headers: { 'Content-Type': 'application/json' }
+        });
 
-      return new Response(JSON.stringify({ result: response.text }), {
-        headers: { 'Content-Type': 'application/json' }
-      });
+    } catch (error) {
+        console.error('Error generating AI response:', error);
+        return new Response(JSON.stringify({ error: error.message }), {
+            status: 500,
+            headers: { 'Content-Type': 'application/json' }
+        });
     }
-
-    // Handle other requests (e.g., serving static files)
-    return await fetch(request);
-  }
-};
+}
