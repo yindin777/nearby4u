@@ -38,75 +38,127 @@
     </div>
 
     <script>
-    // ... (Your existing error handling and map initialization code) ...
-
-    const searchInput = document.getElementById('search-input');
-    const searchButton = document.getElementById('search-button');
-    const resultContainer = document.getElementById('result-container');
-
-    // ... (Error logging function as before) ...
-
-    // Replace with your actual Cloudflare Workers subdomain
-    const workerEndpoint = 'https://<your-subdomain>.workers.dev/ai-search'; 
-
-    async function performAISearch(query, latitude = null, longitude = null) {
+        let map;
         try {
-            // Loading state
-            resultContainer.innerHTML = `
-                <div class="flex items-center justify-center">
-                    <svg class="animate-spin h-5 w-5 mr-3 text-blue-500" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    <span class="text-blue-500">Searching...</span>
+            map = L.map('map').setView([51.505, -0.09], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+        } catch (mapError) {
+            console.error('Map Initialization Error:', mapError);
+            document.getElementById('result-container').innerHTML = `
+                <div class="text-red-500">
+                    Map Loading Failed: ${mapError.message}
                 </div>
             `;
+            return;
+        }
 
-            const response = await fetch(workerEndpoint, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ query, latitude, longitude })
-            });
+        const searchInput = document.getElementById('search-input');
+        const searchButton = document.getElementById('search-button');
+        const resultContainer = document.getElementById('result-container');
 
-            if (!response.ok) {
-                throw new Error(`HTTP Error: ${response.status} - ${response.statusText}`);
-            }
-
-            const data = await response.json();
-
-            if (!data.result) {
-                throw new Error('No results found from the AI.');
-            }
-
-            // ... (Your existing code for displaying results and markers) ...
-
-        } catch (error) {
+        function logError(context, error) {
+            console.error(`Error in ${context}:`, error);
             resultContainer.innerHTML = `
                 <div class="text-red-500">
-                    <p>An error occurred during the search.</p>
-                    <p>Please try again later.</p>
-                    <p>Error details: ${error.message}</p> 
+                    <strong>Error in <span class="math-inline">\{context\}\:</strong\>
+<br\></span>{error.message}
+                    <br>Check console for more details.
                 </div>
             `;
-            console.error('Error during AI search:', error);
         }
-    }
 
-    // ... (Your existing search button event handler and geolocation code) ...
+        const workerEndpoint = 'https://<your-subdomain>.workers.dev/ai-search'; 
+
+        async function performAISearch(query, latitude = null, longitude = null) {
+            try {
+                resultContainer.innerHTML = `
+                    <div class="flex items-center justify-center">
+                        <svg class="animate-spin h-5 w-5 mr-3 text-blue-500" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span class="text-blue-500">Searching...</span>
+                    </div>
+                `;
+
+                const response = await fetch(workerEndpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query, latitude, longitude })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP Error: ${response.status} - ${response.statusText}`);
+                }
+
+                const data = await response.json();
+
+                if (!data.result) {
+                    throw new Error('No results found from the AI.');
+                }
+
+                resultContainer.innerHTML = `
+                    <div class="text-gray-700 whitespace-pre-wrap">
+                        ${data.result || 'No results found.'}
+                    </div>
+                `;
+
+                if (data.location && data.location.lat && data.location.lon) {
+                    L.marker([data.location.lat, data.location.lon])
+                        .addTo(map)
+                        .bindPopup(data.result || 'Search Result')
+                        .openPopup();
+
+                    map.setView([data.location.lat, data.location.lon], 13);
+                }
+
+            } catch (error) {
+                resultContainer.innerHTML = `
+                    <div class="text-red-500">
+                        <p>An error occurred during the search.</p>
+                        <p>Please try again later.</p>
+                        <p>Error details: ${error.message}</p> 
+                    </div>
+                `;
+                console.error('Error during AI search:', error);
+            }
+        }
+
+        searchButton.addEventListener('click', () => {
+            const query = searchInput.value.trim();
+
+            if (!query) {
+                resultContainer.textContent = 'Please enter a search query.';
+                return;
+            }
+
+            performAISearch(query);
+        });
+
+        if ('geolocation' in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    map.setView([latitude, longitude], 13); 
+
+                    L.marker([latitude, longitude])
+                        .addTo(map)
+                        .bindPopup('Your Location')
+                        .openPopup();
+
+                    performAISearch(
+                        `Interesting places and recommendations near <span class="math-inline">\{latitude\},</span>{longitude}`, 
+                        latitude, 
+                        longitude
+                    );
+                },
+                (error) => {
+                    // Handle geolocation errors
+                }
+            );
+        } 
     </script>
 </body>
 </html>
-
-**Key Changes:**
-
-*   **Removed unnecessary code:** Removed redundant error handling and simplified the code for better readability.
-*   **Integrated `workerEndpoint`:** Used the `workerEndpoint` variable for the URL of your Cloudflare Worker.
-*   **Simplified AI interaction:** The code now sends the search query, latitude, and longitude to the Worker in the request body.
-*   **Improved error handling:** Provides more specific error messages to the user.
-
-**Remember:**
-
-*   **Replace `<your-subdomain>.workers.dev`** with your actual Cloudflare Workers subdomain in the `workerEndpoint` variable.
-*   **Create and deploy your `worker.js` file** to Cloudflare Workers as described in the previous responses.
-
-This updated code should integrate your AI-powered search functionality into your `index.html` file. If you encounter any issues or have further questions, feel free to ask!
