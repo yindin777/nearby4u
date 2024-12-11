@@ -1,12 +1,9 @@
-name = "your-pages-function"
-main = "./src/worker.js"
-
 [env.production]
 services = [
-  { binding = "HizmetBaglama", service = "nearby4u" }, # Binding for nearby4u service
+  { binding = "HizmetBaglama", service = "nearby4u" }, 
 ]
 
 workers_ai = [
-  { binding = "nearby4u", value = "Workers AI Catalog" }, # Binding for AI worker (nearby4u)
-  { binding = "@cf/meta/llama-3.2-11b-vision-instruct", value = "Workers AI Catalog" } # AI catalog binding
+  { binding = "nearby4u", value = "Workers AI Catalog" }, 
+  { binding = "@cf/meta/llama-3.2-11b-vision-instruct", value = "Workers AI Catalog" } 
 ]
