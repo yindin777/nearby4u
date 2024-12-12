@@ -7,5 +7,5 @@ account_id = "310e549bbc8846e19ec8b3bd662d5f00"
   upload = { main = "dist/worker.js" }
 
 [[publish]]
-  name = "renew"
+  name = "renew"  # Use your actual worker name here
   cmd = "wrangler publish"
