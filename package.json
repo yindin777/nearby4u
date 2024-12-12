@@ -1,5 +1,5 @@
 {
-  "name": "renew",  # <--- Use your actual worker name here
+  "name": "renew",  
   "version": "1.0.0",
   "scripts": {
     "build": "esbuild worker.js --bundle --outfile=dist/worker.js"
