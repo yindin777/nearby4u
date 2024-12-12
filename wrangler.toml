@@ -4,7 +4,7 @@ account_id = "310e549bbc8846e19ec8b3bd662d5f00"
 
 [build]
   command = "npm run build"
-  upload = "dist/worker.js"
+  upload = { main = "dist/worker.js" }
 
 [[publish]]
   name = "renew"
