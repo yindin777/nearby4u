@@ -1,11 +1,18 @@
-name = "renew"
-type = "javascript"
-account_id = "310e549bbc8846e19ec8b3bd662d5f00"
+name = "my-static-site"  # Name of your static site
+type = "javascript"       # Type of project
 
+# Configuration for the static site
 [build]
-  command = "npm run build"
-  upload = { main = "dist/worker.js" }
+  command = "npm run build"  # Command to build your static site
+  pages_build_output_dir = "dist"  # Directory where your static files are located
 
+# Configuration for the worker
 [[publish]]
-  name = "nearby4u"  
-  cmd = "wrangler publish"
+  name = "my-worker"  # Name of your worker (this should be unique)
+  cmd = "wrangler publish"  # Command to publish your worker
+
+# Bindings to connect your static site with the worker
+[[bindings]]
+  type = "worker"
+  name = "AI_WORKER"  # Name you will use in your static site to call the worker
+  worker = "my-worker"  # The name of the worker you defined above
