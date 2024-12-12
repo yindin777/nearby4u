@@ -12,8 +12,8 @@ async function handlePostRequest(event) {
 
         // Retrieve the AI model from Workers AI Catalog
         const ai = await AI.getInstance({
-            name: "nearby4u", // Replace with the actual name of your AI model
-            binding: "nearby4u"
+            name: "https://renew.yindin777.workers.dev/", // Replace with the actual name of your AI model
+            binding: "@cf/meta/llama-3-8b-instruct"
         });
 
         // Generate AI response
