@@ -1,5 +1,5 @@
 {
-  "name": "nearby4u-ai-map-search",  // Descriptive name for your project
+  "name": "nearby4u-proximity-ai-map-search",  // Descriptive name for your project
   "version": "1.0.0",                 // Version of your project
   "description": "A demo application for searching places using AI and displaying them on a map.",  // Brief description
   "main": "worker.js",                // Entry point of your worker
@@ -21,6 +21,6 @@
     "AI",
     "static-site"
   ],
-  "author": "Your Name",              // Your name or organization
+  "author": "Ins",              // Your name or organization
   "license": "MIT"                    // License type
 }
