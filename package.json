@@ -1,5 +1,5 @@
 {
-  "name": "my-nearby-worker",  # <--- Use your actual worker name here
+  "name": "https://renew.yindin777.workers.dev/",  # <--- Use your actual worker name here
   "version": "1.0.0",
   "scripts": {
     "build": "esbuild worker.js --bundle --outfile=dist/worker.js"
