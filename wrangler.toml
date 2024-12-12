@@ -1,4 +1,4 @@
-name = "https://renew.yindin777.workers.dev/"  # <--- Use your actual worker name here
+name = "renew/"  # <--- Use your actual worker name here
 type = "javascript"
 account_id = "310e549bbc8846e19ec8b3bd662d5f00"
 
@@ -9,6 +9,6 @@ account_id = "310e549bbc8846e19ec8b3bd662d5f00"
   }
 
 [[publish]]
-  name = "https://renew.yindin777.workers.dev/"  # <--- Use your actual worker name here
+  name = "renew"  # <--- Use your actual worker name here
   cmd = "wrangler publish"
   
