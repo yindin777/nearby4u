@@ -1,16 +1,14 @@
-name = "nearby4u"  
-type = "javascript"  
+name = "my-nearby-worker"  # <--- Use your actual worker name here
+type = "javascript"
+account_id = "YOUR_CLOUDFLARE_ACCOUNT_ID"
 
-[site]
-bucket = "./dist" # Update this to the folder containing your static site files.
-entry-point = "./worker.js" # Ensure this points to your Worker script.
+[build]
+  command = "npm run build"
+  upload = {
+    main = "dist/worker.js"
+  }
 
-[env.production]
-route = "nearby4uworker.yindin777.workers.dev/*" # Replace with your actual domain or subdomain.
-services = [
-  { binding = "HizmetBaglama", service = "nearby4u" }
-]
-
-workers_ai = [
-  { binding = "nearby4u", value = "Workers AI Catalog" }
-]
+[[publish]]
+  name = "my-nearby-worker"  # <--- Use your actual worker name here
+  cmd = "wrangler publish"
+  
