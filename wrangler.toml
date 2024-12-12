@@ -16,3 +16,23 @@ type = "javascript"       # Type of project
   type = "worker"
   name = "AI_WORKER"  # Name you will use in your static site to call the worker
   worker = "my-worker"  # The name of the worker you defined above
+.....
+# Configuration for the static site
+name = "nearby4u"  # Name of your static site
+type = "javascript"  # Type of project
+
+# Build configuration for the static site
+[build]
+  command = "npm run build"  # Command to build your static site (if applicable)
+  pages_build_output_dir = "dist"  # Directory where your static files are located
+
+# Configuration for the worker
+[[publish]]
+  name = "nearby4u-worker"  # Name of your worker (this should be unique)
+  cmd = "wrangler publish"   # Command to publish your worker
+
+# Bindings to connect your static site with the worker
+[[bindings]]
+  type = "worker"
+  name = "AI_WORKER"         # Name you will use in your static site to call the worker
+  worker = "nearby4u-worker" # The name of the worker you defined above
