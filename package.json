@@ -1,13 +1,26 @@
 {
-  "name": "renew",
-  "version": "1.0.0",
+  "name": "nearby4u-ai-map-search",  // Descriptive name for your project
+  "version": "1.0.0",                 // Version of your project
+  "description": "A demo application for searching places using AI and displaying them on a map.",  // Brief description
+  "main": "worker.js",                // Entry point of your worker
   "scripts": {
-    "build": "esbuild worker.js --bundle --outfile=dist/worker.js"
+    "build": "echo 'No build step required'",  // Placeholder for build command (if needed)
+    "start": "wrangler dev"           // Command to start local development server
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.1.0"
+    // List your project dependencies here
+    // For example, if you are using a library like axios for HTTP requests:
+    "axios": "^0.21.1"                // Example dependency
   },
   "devDependencies": {
-    "esbuild": "^0.17.12"
-  }
+    "wrangler": "^2.0.0"              // Wrangler CLI for deploying Cloudflare Workers
+  },
+  "keywords": [
+    "map",
+    "search",
+    "AI",
+    "static-site"
+  ],
+  "author": "Your Name",              // Your name or organization
+  "license": "MIT"                    // License type
 }
