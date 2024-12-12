@@ -1,9 +1,16 @@
+name = "nearby4u"  
+type = "javascript"  
+
+[site]
+bucket = "./dist" # Update this to the folder containing your static site files.
+entry-point = "./worker.js" # Ensure this points to your Worker script.
+
 [env.production]
+route = "nearby4uworker.yindin777.workers.dev/*" # Replace with your actual domain or subdomain.
 services = [
-  { binding = "HizmetBaglama", service = "nearby4u" }, 
+  { binding = "HizmetBaglama", service = "nearby4u" }
 ]
 
 workers_ai = [
-  { binding = "nearby4u", value = "Workers AI Catalog" }, 
-  { binding = "@cf/meta/llama-3.2-11b-vision-instruct", value = "Workers AI Catalog" } 
+  { binding = "nearby4u", value = "Workers AI Catalog" }
 ]
