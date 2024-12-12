@@ -1,4 +1,4 @@
-name = "renew/"  # <--- Use your actual worker name here
+name = "renew"  # <--- Use your actual worker name here
 type = "javascript"
 account_id = "310e549bbc8846e19ec8b3bd662d5f00"
 
