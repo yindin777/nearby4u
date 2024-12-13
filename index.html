@@ -5,44 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        body {
-            margin: 0;
-            font-family: sans-serif;
-        }
-
-        #map {
-            height: 300px;
-            width: 100%;
-        }
-
-        #search-container {
-            padding: 10px;
-            display: flex;
-        }
-
-        #search-input {
-            flex-grow: 1;
-            padding: 5px;
-            border: 1px solid #ccc;
-        }
-
-        #search-button {
-            padding: 5px 10px;
-            border: none;
-            background-color: #4CAF50; /* Green */
-            color: white;
-            cursor: pointer;
-        }
-
-        #results-container {
-            padding: 10px;
-        }
-
-        .result-item {
-            margin-bottom: 5px;
-            border: 1px solid #ccc;
-            padding: 5px;
-        }
+        /* Your CSS styles here */ 
     </style>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -76,26 +39,34 @@
             document.getElementById('results-container').innerHTML = "";
 
             try {
-                // Use your Cloudflare Worker URL here
-                const response = await fetch(`https://isleyen.yindin777.workers.dev//search?q=${encodeURIComponent(query)}`);
+                const response = await fetch(`https://isleyen.yindin777.workers.dev/search?q=${encodeURIComponent(query)}`); 
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    if (response.status === 400) {
+                        displayMessage("Missing search query."); 
+                    } else {
+                        displayMessage("An error occurred during the search. Please try again later."); 
+                    }
+                    return; 
                 }
+
                 const data = await response.json();
 
-                if (data && data.length > 0) {
-                    displayResults(data);
+                if (data && data.results && data.results.length > 0) { 
+                    displayResults(data.results); 
                 } else {
                     displayMessage("No results found.");
                 }
+
             } catch (error) {
                 console.error("Search error:", error);
-                displayMessage("An error occurred during the search.");
+                displayMessage("An error occurred during the search. Please try again later."); 
             }
         }
 
         function displayResults(results) {
             const resultsContainer = document.getElementById('results-container');
+            resultsContainer.innerHTML = ""; // Clear previous results
+
             results.forEach(result => {
                 const resultDiv = document.createElement('div');
                 resultDiv.className = 'result-item';
@@ -107,8 +78,8 @@
                         .bindPopup(`<b>${result.display_name}</b>`).openPopup();
                 }
             });
-            if(results.length > 0 && results[0].lat && results[0].lon)
-            {
+
+            if (results.length > 0 && results[0].lat && results[0].lon) {
                 map.setView([results[0].lat, results[0].lon], 14);
             }
         }
