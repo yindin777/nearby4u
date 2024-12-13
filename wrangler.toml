@@ -7,11 +7,11 @@ type = "javascript"
 
 
 [[publish]]
-  name = "nearby4uworker"  
+  name = "isleyen"  
   cmd = "wrangler publish"   
 
 
 [[bindings]]
   type = "worker"
-  name = "nearby4uworker"
+  name = "isleyen"
   worker = "dist/worker.js"
