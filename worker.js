@@ -13,34 +13,51 @@ async function handleRequest(request) {
 
     // Access the Workers AI model
     const ai = await AI.getInstance({
-      name: "isleyen.yindin777.workers.dev", // AI model name from screenshot
-      binding: "Workers AI Catalog" // Binding name from screenshot
+      name: "isleyen.yindin777.workers.dev", // Replace with your actual AI model name
+      binding: "Workers AI Catalog" 
     });
 
-    // Access the service bindings
+    // Access service bindings (assuming names are as in the screenshot)
     const sitedendigerarama = await ServiceBinding.getBinding("sitedendigerarama");
     const siteninbindingi = await ServiceBinding.getBinding("siteninbindingi");
     const sitenindigeri = await ServiceBinding.getBinding("sitenindigeri");
 
-    // Use the service bindings to get relevant data (example)
-    const data1 = await sitedendigerarama.getData1(); // Replace with actual method and parameters
-    const data2 = await siteninbindingi.getData2(); // Replace with actual method and parameters
-    const data3 = await sitenindigeri.getData3(); // Replace with actual method and parameters
+    // Example: Get data from service bindings (replace with actual methods)
+    const data1 = await sitedendigerarama.getData1(); 
+    const data2 = await siteninbindingi.getData2(); 
+    const data3 = await sitenindigeri.getData3(); 
 
-    // Generate AI response based on data from service bindings
+    // Generate AI response (adapt prompt as needed)
     const response = await ai.generate({
-      prompt: `Find interesting places and recommendations near ${query}. Use data1: ${data1}, data2: ${data2}, and data3: ${data3} to provide more relevant and informative results.`,
+      prompt: `Find interesting places and recommendations near ${query}. Utilize information from the following sources: 
+      - Data1: ${data1}
+      - Data2: ${data2}
+      - Data3: ${data3} 
+      Provide results in a concise and human-readable format, including place names, locations, and any relevant details.`,
       input: query
     });
 
-    return new Response(JSON.stringify({ result: response.text }), {
-      headers: { 'Content-Type': 'application/json' },
+    // Format response for index.html
+    const results = response.text.split('\n').map(line => { 
+      const parts = line.split(' - '); 
+      if (parts.length >= 2) { 
+        return { 
+          display_name: parts[0], 
+          location: parts[1] 
+        }; 
+      } 
+      return null; 
+    }).filter(result => result !== null); 
+
+    return new Response(JSON.stringify({ results }), { 
+      headers: { 'Content-Type': 'application/json' } 
     });
+
   } catch (error) {
     console.error('Error:', error);
-    return new Response(JSON.stringify({ error: error.message || 'An error occurred' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
+    return new Response(JSON.stringify({ error: error.message || 'An error occurred' }), { 
+      status: 500, 
+      headers: { 'Content-Type': 'application/json' } 
     });
   }
 }
