@@ -1,7 +1,7 @@
 // Initialize Supabase
 const { createClient } = supabase;
-const supabaseUrl = 'YOUR_SUPABASE_URL'; // This will be set in your environment variables
-const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'; // This will be set in your environment variables
+const supabaseUrl = 'YOUR_SUPABASE_URL'; // Replace with your Supabase URL
+const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'; // Replace with your Supabase Anon Key
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Function to fetch providers from Supabase
@@ -74,6 +74,31 @@ async function bookAppointment(providerId) {
     const dateTime = prompt("Enter the date and time for your appointment (YYYY-MM-DD HH:MM):");
     if (!dateTime) return;
 
-    const { user } = await supabase.auth.getUser(); // Get the current user
-    if (!user
-    
+    const { data: user, error: userError } = await supabase.auth.getUser(); // Get the current user
+    if (userError) {
+        console.error('Error fetching user:', userError);
+        return;
+    }
+
+    const { error } = await supabase
+        .from('bookings') // Use the actual bookings table name
+        .insert([
+            {
+                user_id: user.id,
+                provider_id: providerId,
+                service_type: 'Service Type Placeholder', // Replace with actual service type if needed
+                date_time: new Date(dateTime).toISOString(),
+                status: 'pending'
+            }
+        ]);
+
+    if (error) {
+        console.error('Error booking appointment:', error);
+        alert('Failed to book appointment. Please try again.');
+    } else {
+        alert('Appointment booked successfully!');
+    }
+}
+
+// Initial display of all providers
+displayProviders();
