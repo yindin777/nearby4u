@@ -1,7 +1,7 @@
 // Initialize Supabase
 const { createClient } = supabase;
-const supabaseUrl = 'YOUR_SUPABASE_URL'; // Replace with your Supabase URL
-const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'; // Replace with your Supabase Anon Key
+const supabaseUrl = 'https://ohaxrfpokimcfcvfldze.supabase.co'; // Replace with your Supabase URL
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9oYXhyZnBva2ltY2ZjdmZsZHplIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzI1NzMyNTcsImV4cCI6MjA0ODE0OTI1N30.7_cjAvfme7sbM8AxTBPiu3VK_eBGm-DWxYH2QknAMUw'; // Replace with your Supabase Anon Key
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Function to fetch providers from Supabase
