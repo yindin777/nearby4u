@@ -13,19 +13,23 @@ async function handleRequest(request) {
 
     // Access the Workers AI model
     const ai = await AI.getInstance({
-      name: "isleyen.yindin777.workers.dev", // Replace with your actual AI model name
-      binding: "Workers AI Catalog" // Binding name from the screenshot
+      name: "isleyen.yindin777.workers.dev", // AI model name from screenshot
+      binding: "Workers AI Catalog" // Binding name from screenshot
     });
 
-    // Access the service binding (assuming it's named 'nearby4uservice')
-    const nearby4uservice = await ServiceBinding.getBinding("nearby4uservice");
+    // Access the service bindings
+    const sitedendigerarama = await ServiceBinding.getBinding("sitedendigerarama");
+    const siteninbindingi = await ServiceBinding.getBinding("siteninbindingi");
+    const sitenindigeri = await ServiceBinding.getBinding("sitenindigeri");
 
-    // Use the service binding to get relevant data (e.g., location information)
-    const locationData = await nearby4uservice.getLocationData(query); // Example: Get location data based on user query
+    // Use the service bindings to get relevant data (example)
+    const data1 = await sitedendigerarama.getData1(); // Replace with actual method and parameters
+    const data2 = await siteninbindingi.getData2(); // Replace with actual method and parameters
+    const data3 = await sitenindigeri.getData3(); // Replace with actual method and parameters
 
-    // Generate AI response based on location data
+    // Generate AI response based on data from service bindings
     const response = await ai.generate({
-      prompt: `Find interesting places and recommendations near ${locationData.location}. Provide results in a concise and human-readable format.`,
+      prompt: `Find interesting places and recommendations near ${query}. Use data1: ${data1}, data2: ${data2}, and data3: ${data3} to provide more relevant and informative results.`,
       input: query
     });
 
