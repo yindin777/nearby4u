@@ -1,25 +1,14 @@
 {
-  "name": "nearby4u-proximity-ai-map-search",  
-  "version": "1.0.0",                 
-  "description": "A demo application for searching places using AI and displaying them on a map.", 
-  "main": "worker.js",                
+  "name": "nearby4u-proximity-ai-map-search",
+  "version": "1.0.0",
+  "description": "A demo application for searching places using AI and displaying them on a map.",
+  "main": "worker.js", // Important: Points to your Worker script
   "scripts": {
-    "build": "echo 'No build step required'",  
-    "start": "wrangler dev"           
-  },
-  "dependencies": {
-    
-    "axios": "^0.21.1"                
+    "start": "wrangler dev" // Keep for local development (optional)
   },
   "devDependencies": {
-    "wrangler": "^2.0.0"              
+    "wrangler": "^3.0.0" // Or latest version
   },
-  "keywords": [
-    "map",
-    "search",
-    "AI",
-    "static-site"
-  ],
-  "author": "Ins",              
-  "license": "MIT"                    
+  "author": "Ins",
+  "license": "MIT"
 }
