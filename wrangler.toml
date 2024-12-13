@@ -1,17 +1,3 @@
-name = "nearby4u"  
+name = "nearby4u"
 type = "javascript"
-
-[build]
-  command = "npm run build"  
-  pages_build_output_dir = "dist"  
-
-
-[[publish]]
-  name = "isleyen"  
-  cmd = "wrangler publish"   
-
-
-[[bindings]]
-  type = "worker"
-  name = "isleyen"
-  worker = "dist/worker.js"
+account_id = "310e549bbc8846e19ec8b3bd662d5f00"
