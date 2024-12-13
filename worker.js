@@ -13,7 +13,7 @@ async function handlePostRequest(event) {
         // Retrieve the AI model from Workers AI Catalog
         const ai = await AI.getInstance({
             name: "https://isleyen.yindin777.workers.dev/", // Replace with the actual name of your AI model
-            binding: "@cf/meta/llama-3-8b-instruct"
+            binding: "https://ohaxrfpokimcfcvfldze.supabase.co"
         });
 
         // Generate AI response
