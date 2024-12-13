@@ -1,19 +1,18 @@
 {
-  "name": "nearby4u-proximity-ai-map-search",  // Descriptive name for your project
-  "version": "1.0.0",                 // Version of your project
+  "name": "nearby4u-proximity-ai-map-search",  
+  "version": "1.0.0",                 
   "description": "A demo application for searching places using AI and displaying them on a map.",  // Brief description
-  "main": "worker.js",                // Entry point of your worker
+  "main": "worker.js",                
   "scripts": {
-    "build": "echo 'No build step required'",  // Placeholder for build command (if needed)
-    "start": "wrangler dev"           // Command to start local development server
+    "build": "echo 'No build step required'",  
+    "start": "wrangler dev"           
   },
   "dependencies": {
-    // List your project dependencies here
-    // For example, if you are using a library like axios for HTTP requests:
-    "axios": "^0.21.1"                // Example dependency
+    
+    "axios": "^0.21.1"                
   },
   "devDependencies": {
-    "wrangler": "^2.0.0"              // Wrangler CLI for deploying Cloudflare Workers
+    "wrangler": "^2.0.0"              
   },
   "keywords": [
     "map",
@@ -21,6 +20,6 @@
     "AI",
     "static-site"
   ],
-  "author": "Ins",              // Your name or organization
-  "license": "MIT"                    // License type
+  "author": "Ins",              
+  "license": "MIT"                    
 }
