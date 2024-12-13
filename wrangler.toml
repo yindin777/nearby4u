@@ -13,5 +13,5 @@ type = "javascript"
 
 [[bindings]]
   type = "worker"
-  name = "nearby4uworker" 
-  worker = "nearby4u-worker" 
+  name = "nearby4uworker"
+  worker = "dist/worker.js"
